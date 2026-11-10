@@ -1,0 +1,27 @@
+name: Fork CI Smoke
+
+# Manual smoke test: proves GitHub Actions is alive on this fork.
+#
+# Forks silently suppress workflow registration until a workflow file is added
+# or changed - `gh run list` and `gh workflow list` both come back empty while
+# /actions/permissions still reports enabled:true. This file is the canary.
+# Run it from the Actions tab, or:
+#   gh workflow run ci-smoke.yml -R <owner>/<repo>
+
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Report
+        run: |
+          echo "Actions is running on ${{ github.repository }}"
+          echo "ref=${{ github.ref }}"
+          echo "sha=${{ github.sha }}"
+          echo "runner=$RUNNER_OS $RUNNER_ARCH"
